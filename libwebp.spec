@@ -1,6 +1,6 @@
 Name:		libwebp
 Version:	0.1.3
-Release:	2%{?dist}
+Release:	3%{?dist}
 Group:		Development/Libraries
 URL:		http://webmproject.org/
 Summary:	Library and tools for the WebP graphics format
@@ -112,6 +112,9 @@ cp swig/*.jar swig/*.so %{buildroot}/%{_libdir}/%{name}-java/
 %{_libdir}/%{name}-java/
 
 %changelog
+* Fri Dec 21 2012 Adam Tkac <atkac redhat com> - 0.1.3-3
+- rebuild against new libjpeg
+
 * Thu Jul 19 2012 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 0.1.3-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_18_Mass_Rebuild
 
