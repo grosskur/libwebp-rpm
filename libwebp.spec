@@ -1,6 +1,6 @@
 Name:		libwebp
 Version:	0.2.1
-Release:	1%{?dist}
+Release:	2%{?dist}
 Group:		Development/Libraries
 URL:		http://webmproject.org/
 Summary:	Library and tools for the WebP graphics format
@@ -112,6 +112,9 @@ cp swig/*.jar swig/*.so %{buildroot}/%{_libdir}/%{name}-java/
 %{_libdir}/%{name}-java/
 
 %changelog
+* Fri Jan 18 2013 Adam Tkac <atkac redhat com> - 0.2.1-2
+- rebuild due to "jpeg8-ABI" feature drop
+
 * Thu Dec 27 2012 Rahul Sundaram <sundaram@fedoraproject.org> - 0.2.1-1
 - new upstream release 0.2.1
 
