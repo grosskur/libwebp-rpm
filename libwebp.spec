@@ -1,6 +1,7 @@
+%global _hardened_build 1
 Name:		libwebp
-Version:	0.2.1
-Release:	3%{?dist}
+Version:	0.3.0
+Release:	1%{?dist}
 Group:		Development/Libraries
 URL:		http://webmproject.org/
 Summary:	Library and tools for the WebP graphics format
@@ -8,7 +9,9 @@ Summary:	Library and tools for the WebP graphics format
 License:	BSD
 Source0:	http://webp.googlecode.com/files/%{name}-%{version}.tar.gz
 Source1:	libwebp_jni_example.java	
-BuildRequires:	libjpeg-devel libpng-devel libtool swig
+BuildRequires:	libjpeg-devel libpng-devel libtool swig 
+BuildRequires:  giflib-devel
+BuildRequires:  libtiff-devel
 BuildRequires:	java-devel
 BuildRequires:	jpackage-utils
 
@@ -58,7 +61,8 @@ Java bindings for libwebp.
 %build
 mkdir -p m4
 ./autogen.sh
-%configure --disable-static
+# enable libwebpmux since gif2webp depends on it
+%configure --disable-static --enable-libwebpmux
 make %{?_smp_mflags}
 
 # swig generated Java bindings
@@ -71,7 +75,7 @@ swig -ignoremissing -I../src -java \
 	-outdir java/com/google/webp \
 	-o libwebp_java_wrap.c libwebp.i
 
-gcc %{optflags} -shared -fPIC -fno-strict-aliasing \
+gcc %{optflags} -shared \
 	-I/usr/lib/jvm/java/include \
 	-I/usr/lib/jvm/java/include/linux \
 	-I../src \
@@ -83,7 +87,7 @@ javac com/google/webp/libwebp.java
 jar cvf ../libwebp.jar com/google/webp/*.class
 
 %install
-make install DESTDIR=%{buildroot}
+%make_install
 find "%{buildroot}/%{_libdir}" -type f -name "*.la" -delete
 
 # swig generated Java bindings
@@ -95,7 +99,10 @@ cp swig/*.jar swig/*.so %{buildroot}/%{_libdir}/%{name}-java/
 %postun -n %{name} -p /sbin/ldconfig
 
 %files tools
-%{_bindir}/*
+%{_bindir}/cwebp
+%{_bindir}/dwebp
+%{_bindir}/gif2webp
+%{_bindir}/webpmux
 %{_mandir}/man*/*
 
 %files -n %{name}
@@ -112,6 +119,13 @@ cp swig/*.jar swig/*.so %{buildroot}/%{_libdir}/%{name}-java/
 %{_libdir}/%{name}-java/
 
 %changelog
+* Mon May 13 2013 Rahul Sundaram <sundaram@fedoraproject.org> - 0.3.0-1
+- upstream release 0.3.0
+- enable gif2webp
+- add build requires on giflib-devel and libtiff-devel
+- use make_install and hardened macros
+- list binaries explicitly
+
 * Thu Feb 14 2013 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 0.2.1-3
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_19_Mass_Rebuild
 
