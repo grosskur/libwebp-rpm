@@ -1,7 +1,7 @@
 %global _hardened_build 1
 Name:		libwebp
-Version:	0.3.0
-Release:	2%{?dist}
+Version:	0.3.1
+Release:	1%{?dist}
 Group:		Development/Libraries
 URL:		http://webmproject.org/
 Summary:	Library and tools for the WebP graphics format
@@ -59,7 +59,6 @@ Java bindings for libwebp.
 %setup -q
 
 %build
-mkdir -p m4
 ./autogen.sh
 # enable libwebpmux since gif2webp depends on it
 %configure --disable-static --enable-libwebpmux
@@ -119,6 +118,9 @@ cp swig/*.jar swig/*.so %{buildroot}/%{_libdir}/%{name}-java/
 %{_libdir}/%{name}-java/
 
 %changelog
+* Sun Aug 04 2013 Sandro Mani <manisandro@gmail.com> - 0.3.1-1
+- upstream release 0.3.1
+
 * Sat Aug 03 2013 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 0.3.0-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_20_Mass_Rebuild
 
