@@ -101,7 +101,6 @@ cp swig/*.jar swig/*.so %{buildroot}/%{_libdir}/%{name}-java/
 %{_bindir}/dwebp
 %{_bindir}/gif2webp
 %{_bindir}/webpmux
-%{_bindir}/webpdemux
 %{_mandir}/man*/*
 
 %files -n %{name}
