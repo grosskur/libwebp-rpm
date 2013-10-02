@@ -1,7 +1,7 @@
 %global _hardened_build 1
 Name:		libwebp
 Version:	0.3.1
-Release:	1%{?dist}
+Release:	2%{?dist}
 Group:		Development/Libraries
 URL:		http://webmproject.org/
 Summary:	Library and tools for the WebP graphics format
@@ -60,8 +60,7 @@ Java bindings for libwebp.
 
 %build
 ./autogen.sh
-# enable libwebpmux since gif2webp depends on it
-%configure --disable-static --enable-libwebpmux
+%configure --disable-static --enable-libwebpmux --enable-libwebpdemux
 make %{?_smp_mflags}
 
 # swig generated Java bindings
@@ -102,6 +101,7 @@ cp swig/*.jar swig/*.so %{buildroot}/%{_libdir}/%{name}-java/
 %{_bindir}/dwebp
 %{_bindir}/gif2webp
 %{_bindir}/webpmux
+%{_bindir}/webpdemux
 %{_mandir}/man*/*
 
 %files -n %{name}
@@ -118,6 +118,9 @@ cp swig/*.jar swig/*.so %{buildroot}/%{_libdir}/%{name}-java/
 %{_libdir}/%{name}-java/
 
 %changelog
+* Wed Oct 02 2013 Sandro Mani <manisandro@gmail.com> - 0.3.1-2
+- enable webpdemux
+
 * Sun Aug 04 2013 Sandro Mani <manisandro@gmail.com> - 0.3.1-1
 - upstream release 0.3.1
 
