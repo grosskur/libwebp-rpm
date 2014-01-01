@@ -1,19 +1,22 @@
 %global _hardened_build 1
-Name:		libwebp
-Version:	0.3.1
-Release:	2%{?dist}
-Group:		Development/Libraries
-URL:		http://webmproject.org/
-Summary:	Library and tools for the WebP graphics format
+
+Name:          libwebp
+Version:       0.4.0
+Release:       1%{?dist}
+Group:         Development/Libraries
+URL:           http://webmproject.org/
+Summary:       Library and tools for the WebP graphics format
 # Additional IPR is licensed as well. See PATENTS file for details
-License:	BSD
-Source0:	http://webp.googlecode.com/files/%{name}-%{version}.tar.gz
-Source1:	libwebp_jni_example.java	
-BuildRequires:	libjpeg-devel libpng-devel libtool swig 
-BuildRequires:  giflib-devel
-BuildRequires:  libtiff-devel
-BuildRequires:	java-devel
-BuildRequires:	jpackage-utils
+License:       BSD
+Source0:       http://webp.googlecode.com/files/%{name}-%{version}.tar.gz
+Source1:       libwebp_jni_example.java
+BuildRequires: libjpeg-devel
+BuildRequires: libpng-devel
+BuildRequires: giflib-devel
+BuildRequires: libtiff-devel
+BuildRequires: java-devel
+BuildRequires: jpackage-utils
+BuildRequires: swig
 
 %description
 WebP is an image format that does lossy compression of digital
@@ -23,8 +26,8 @@ developers can use WebP to compress, archive and distribute digital
 images more efficiently.
 
 %package tools
-Group:		Development/Tools
-Summary:	The WebP command line tools
+Group:         Development/Tools
+Summary:       The WebP command line tools
 
 %description tools
 WebP is an image format that does lossy compression of digital
@@ -34,9 +37,9 @@ developers can use WebP to compress, archive and distribute digital
 images more efficiently.
 
 %package devel
-Group:		Development/Libraries
-Summary:	Development files for libwebp, a library for the WebP format
-Requires:	%{name}%{?_isa} = %{version}-%{release}
+Group:         Development/Libraries
+Summary:       Development files for libwebp, a library for the WebP format
+Requires:      %{name}%{?_isa} = %{version}-%{release}
 
 %description devel
 WebP is an image format that does lossy compression of digital
@@ -46,11 +49,11 @@ developers can use WebP to compress, archive and distribute digital
 images more efficiently.
 
 %package java
-Group:		Development/Libraries
-Summary:	Java bindings for libwebp, a library for the WebP format
-Requires:	%{name}%{?_isa} = %{version}-%{release}
-Requires:	java
-Requires:	jpackage-utils
+Group:         Development/Libraries
+Summary:       Java bindings for libwebp, a library for the WebP format
+Requires:      %{name}%{?_isa} = %{version}-%{release}
+Requires:      java
+Requires:      jpackage-utils
 
 %description java
 Java bindings for libwebp.
@@ -59,8 +62,7 @@ Java bindings for libwebp.
 %setup -q
 
 %build
-./autogen.sh
-%configure --disable-static --enable-libwebpmux --enable-libwebpdemux
+%configure --disable-static --enable-libwebpmux --enable-libwebpdemux --enable-libwebpdecoder
 make %{?_smp_mflags}
 
 # swig generated Java bindings
@@ -71,7 +73,7 @@ mkdir -p java/com/google/webp
 swig -ignoremissing -I../src -java \
 	-package com.google.webp  \
 	-outdir java/com/google/webp \
-	-o libwebp_java_wrap.c libwebp.i
+	-o libwebp_java_wrap.c libwebp.swig
 
 gcc %{optflags} -shared \
 	-I/usr/lib/jvm/java/include \
