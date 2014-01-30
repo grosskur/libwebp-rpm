@@ -119,7 +119,7 @@ cp swig/*.jar swig/*.so %{buildroot}/%{_libdir}/%{name}-java/
 %{_libdir}/%{name}-java/
 
 %changelog
-* Fri Jan 02 2014 Sandro Mani <manisandro@gmail.com> - 0.4.0-1
+* Thu Jan 02 2014 Sandro Mani <manisandro@gmail.com> - 0.4.0-1
 - upstream release 0.4.0
 
 * Wed Oct 02 2013 Sandro Mani <manisandro@gmail.com> - 0.3.1-2
