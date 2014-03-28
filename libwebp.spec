@@ -2,7 +2,7 @@
 
 Name:          libwebp
 Version:       0.4.0
-Release:       1%{?dist}
+Release:       2%{?dist}
 Group:         Development/Libraries
 URL:           http://webmproject.org/
 Summary:       Library and tools for the WebP graphics format
@@ -52,7 +52,7 @@ images more efficiently.
 Group:         Development/Libraries
 Summary:       Java bindings for libwebp, a library for the WebP format
 Requires:      %{name}%{?_isa} = %{version}-%{release}
-Requires:      java
+Requires:      java-headless
 Requires:      jpackage-utils
 
 %description java
@@ -119,6 +119,9 @@ cp swig/*.jar swig/*.so %{buildroot}/%{_libdir}/%{name}-java/
 %{_libdir}/%{name}-java/
 
 %changelog
+* Fri Mar 28 2014 Michael Simacek <msimacek@redhat.com> - 0.4.0-2
+- Use Requires: java-headless rebuild (#1067528)
+
 * Thu Jan 02 2014 Sandro Mani <manisandro@gmail.com> - 0.4.0-1
 - upstream release 0.4.0
 
