@@ -69,8 +69,7 @@ Java bindings for libwebp.
 %build
 autoreconf -vif
 %configure --disable-static --enable-libwebpmux \
-           --enable-libwebpdemux --enable-libwebpdecoder \
-           --disable-rpath
+           --enable-libwebpdemux --enable-libwebpdecoder
 
 make %{?_smp_mflags}
 
