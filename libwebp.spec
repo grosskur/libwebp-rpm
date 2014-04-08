@@ -2,7 +2,7 @@
 
 Name:          libwebp
 Version:       0.4.0
-Release:       2%{?dist}
+Release:       3%{?dist}
 Group:         Development/Libraries
 URL:           http://webmproject.org/
 Summary:       Library and tools for the WebP graphics format
@@ -10,6 +10,9 @@ Summary:       Library and tools for the WebP graphics format
 License:       BSD
 Source0:       http://webp.googlecode.com/files/%{name}-%{version}.tar.gz
 Source1:       libwebp_jni_example.java
+
+Patch0:        libwebp-0.4.0-endian-check.patch
+
 BuildRequires: libjpeg-devel
 BuildRequires: libpng-devel
 BuildRequires: giflib-devel
@@ -61,8 +64,14 @@ Java bindings for libwebp.
 %prep
 %setup -q
 
+%patch0 -p1
+
 %build
-%configure --disable-static --enable-libwebpmux --enable-libwebpdemux --enable-libwebpdecoder
+autoreconf -vif
+%configure --disable-static --enable-libwebpmux \
+           --enable-libwebpdemux --enable-libwebpdecoder \
+           --disable-rpath
+
 make %{?_smp_mflags}
 
 # swig generated Java bindings
@@ -119,6 +128,10 @@ cp swig/*.jar swig/*.so %{buildroot}/%{_libdir}/%{name}-java/
 %{_libdir}/%{name}-java/
 
 %changelog
+* Tue Apr 08 2014 Jaromir Capik <jcapik@redhat.com> - 0.4.0-3
+- Fixing endian checks (#962091)
+- Fixing FTPBS caused by rpath presence
+
 * Fri Mar 28 2014 Michael Simacek <msimacek@redhat.com> - 0.4.0-2
 - Use Requires: java-headless rebuild (#1067528)
 
