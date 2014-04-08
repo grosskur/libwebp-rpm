@@ -20,6 +20,7 @@ BuildRequires: libtiff-devel
 BuildRequires: java-devel
 BuildRequires: jpackage-utils
 BuildRequires: swig
+BuildRequires: autoconf automake libtool
 
 %description
 WebP is an image format that does lossy compression of digital
