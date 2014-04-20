@@ -1,5 +1,11 @@
 %global _hardened_build 1
 
+%if 0%{?rhel} == 5 || 0%{?rhel} == 6
+%bcond_with java
+%else
+%bcond_without java
+%endif
+
 Name:          libwebp
 Version:       0.4.0
 Release:       3%{?dist}
@@ -9,7 +15,9 @@ Summary:       Library and tools for the WebP graphics format
 # Additional IPR is licensed as well. See PATENTS file for details
 License:       BSD
 Source0:       http://webp.googlecode.com/files/%{name}-%{version}.tar.gz
+%if %{with java}
 Source1:       libwebp_jni_example.java
+%endif
 
 Patch0:        libwebp-0.4.0-endian-check.patch
 
@@ -17,9 +25,11 @@ BuildRequires: libjpeg-devel
 BuildRequires: libpng-devel
 BuildRequires: giflib-devel
 BuildRequires: libtiff-devel
+%if %{with java}
 BuildRequires: java-devel
 BuildRequires: jpackage-utils
 BuildRequires: swig
+%endif
 BuildRequires: autoconf automake libtool
 
 %description
@@ -52,6 +62,7 @@ container based on RIFF. Webmasters, web developers and browser
 developers can use WebP to compress, archive and distribute digital
 images more efficiently.
 
+%if %{with java}
 %package java
 Group:         Development/Libraries
 Summary:       Java bindings for libwebp, a library for the WebP format
@@ -61,6 +72,7 @@ Requires:      jpackage-utils
 
 %description java
 Java bindings for libwebp.
+%endif
 
 %prep
 %setup -q
@@ -74,6 +86,7 @@ autoreconf -vif
 
 make %{?_smp_mflags}
 
+%if %{with java}
 # swig generated Java bindings
 cp %{SOURCE1} .
 cd swig
@@ -94,14 +107,17 @@ gcc %{optflags} -shared \
 cd java
 javac com/google/webp/libwebp.java
 jar cvf ../libwebp.jar com/google/webp/*.class
+%endif
 
 %install
 %make_install
 find "%{buildroot}/%{_libdir}" -type f -name "*.la" -delete
 
+%if %{with java}
 # swig generated Java bindings
 mkdir -p %{buildroot}/%{_libdir}/%{name}-java
 cp swig/*.jar swig/*.so %{buildroot}/%{_libdir}/%{name}-java/
+%endif
 
 %post -n %{name} -p /sbin/ldconfig
 
@@ -123,9 +139,11 @@ cp swig/*.jar swig/*.so %{buildroot}/%{_libdir}/%{name}-java/
 %{_includedir}/*
 %{_libdir}/pkgconfig/*
 
+%if %{with java}
 %files java
 %doc libwebp_jni_example.java
 %{_libdir}/%{name}-java/
+%endif
 
 %changelog
 * Tue Apr 08 2014 Jaromir Capik <jcapik@redhat.com> - 0.4.0-3
