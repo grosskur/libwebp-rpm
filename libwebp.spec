@@ -1,3 +1,19 @@
+%global p_vendor         hhvm
+%define _name            libwebp
+
+%if 0%{?p_vendor:1}
+  %global _orig_prefix   %{_prefix}
+  %global name_prefix    %{p_vendor}-
+
+  # Use the alternate locations for things.
+  %define _lib            lib 
+  %global _real_initrddir %{_initrddir}
+  %global _sysconfdir     %{_sysconfdir}/hhvm
+  %define _prefix         /opt/hhvm
+  %define _libdir         %{_prefix}/lib
+  %define _mandir         %{_datadir}/man
+%endif
+
 %global _hardened_build 1
 
 %if 0%{?rhel} == 5 || 0%{?rhel} == 6
@@ -6,7 +22,7 @@
 %bcond_without java
 %endif
 
-Name:          libwebp
+Name:          %{?name_prefix}%{_name}
 Version:       0.4.0
 Release:       3%{?dist}
 Group:         Development/Libraries
@@ -14,7 +30,7 @@ URL:           http://webmproject.org/
 Summary:       Library and tools for the WebP graphics format
 # Additional IPR is licensed as well. See PATENTS file for details
 License:       BSD
-Source0:       http://webp.googlecode.com/files/%{name}-%{version}.tar.gz
+Source0:       http://webp.googlecode.com/files/%{_name}-%{version}.tar.gz
 %if %{with java}
 Source1:       libwebp_jni_example.java
 %endif
@@ -31,6 +47,8 @@ BuildRequires: jpackage-utils
 BuildRequires: swig
 %endif
 BuildRequires: autoconf automake libtool
+# Don't provide un-namespaced libraries inside rpm database
+AutoReqProv: 0
 
 %description
 WebP is an image format that does lossy compression of digital
@@ -40,6 +58,8 @@ developers can use WebP to compress, archive and distribute digital
 images more efficiently.
 
 %package tools
+# Don't provide un-namespaced libraries inside rpm database
+AutoReqProv: 0
 Group:         Development/Tools
 Summary:       The WebP command line tools
 
@@ -51,6 +71,8 @@ developers can use WebP to compress, archive and distribute digital
 images more efficiently.
 
 %package devel
+# Don't provide un-namespaced libraries inside rpm database
+AutoReqProv: 0
 Group:         Development/Libraries
 Summary:       Development files for libwebp, a library for the WebP format
 Requires:      %{name}%{?_isa} = %{version}-%{release}
@@ -75,7 +97,7 @@ Java bindings for libwebp.
 %endif
 
 %prep
-%setup -q
+%setup -q -n %{_name}-%{version}
 
 %patch0 -p1
 
@@ -115,8 +137,8 @@ find "%{buildroot}/%{_libdir}" -type f -name "*.la" -delete
 
 %if %{with java}
 # swig generated Java bindings
-mkdir -p %{buildroot}/%{_libdir}/%{name}-java
-cp swig/*.jar swig/*.so %{buildroot}/%{_libdir}/%{name}-java/
+mkdir -p %{buildroot}/%{_libdir}/%{_name}-java
+cp swig/*.jar swig/*.so %{buildroot}/%{_libdir}/%{_name}-java/
 %endif
 
 %post -n %{name} -p /sbin/ldconfig
@@ -132,17 +154,17 @@ cp swig/*.jar swig/*.so %{buildroot}/%{_libdir}/%{name}-java/
 
 %files -n %{name}
 %doc README PATENTS COPYING NEWS AUTHORS
-%{_libdir}/%{name}*.so.*
+%{_libdir}/%{_name}*.so.*
 
 %files devel
-%{_libdir}/%{name}*.so
+%{_libdir}/%{_name}*.so
 %{_includedir}/*
 %{_libdir}/pkgconfig/*
 
 %if %{with java}
 %files java
 %doc libwebp_jni_example.java
-%{_libdir}/%{name}-java/
+%{_libdir}/%{_name}-java/
 %endif
 
 %changelog
